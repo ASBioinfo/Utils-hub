@@ -180,5 +180,100 @@ bcftools view vcf_filtered_maf_05.recode.vcf.gz NC_040076.1 > popgenome/NC_04007
 
 vcftools --vcf sp058_DNA.vcf --remove-indels --minQ 40 --recode --recode-INFO-all --out sp058_DNA_q40_SNP_only.vcf
 
+ID mapping
+* Protein accession conversion to Gene symbol
+
+$ for i in `cat file`; do printf ${i}"\t"; esearch -db protein -query ${i} | elink -target gene | esummary | xtract -pattern DocumentSummary -element Name; done
+
+* Minigraph command
+minigraph -cxggs -t45 GCF_003369695.1_UOA_Brahman_withY_sline.fna LGP01_arcs_gapc_sline.fa > ./final_1/ref_LGP01.gfa
+
+-For multiple assemblies with backbone
+
+minigraph -cxggs -t50 GCF_003369695.1_UOA_Brahman_withY_sline.fna LGP04_supernova_N.fa >ref_LGP04.gfa
+minigraph -cxggs -t50 ref_LGP04.gfa LGP05_supernova_N.fa >ref_LGP04_LGP05.gfa
+minigraph -cxggs -t50 ref_LGP04_LGP05.gfa LGP02_supernova_N.fa >ref_LGP04_LGP05_LGP02.gfa
+minigraph -cxggs -t50 ref_LGP04_LGP05_LGP02.gfa LGP03_supernova_N.fa >ref_LGP04_LGP05_LGP02_LGP03.gfa
+minigraph -cxggs -t50 ref_LGP04_LGP05_LGP02_LGP03.gfa LGP01_supernova_N.fa >ref_LGP04_LGP05_LGP02_LGP03_LGP01.gfa
+
+*Mash distance calculation
+minigraph --inv no -cxggs -t 80 ../GCF_003369695.1_UOA_Brahman_withY_sline.fna ../LGP02_supernova_N.fa ../LGP01_supernova_N.fa ../LGP04_supernova_N.fa ../LGP05_supernova_N.fa ../LGP03_supernova_N.fa >mash_genetic_distance.gfa
+
+then run script.sh
+minigraph -t 110 --cov -x asm mash_genetic_distance.gfa ../GCF_003369695.1_UOA_Brahman_withY_sline.fna > graph_rev_brahman.gfa
+minigraph -t 110 --cov -x asm mash_genetic_distance.gfa ../LGP01_supernova_N.fa > graph_rev_LGP01.gfa
+minigraph -t 110 --cov -x asm mash_genetic_distance.gfa ../LGP02_supernova_N.fa > graph_rev_LGP02.gfa
+minigraph -t 110 --cov -x asm mash_genetic_distance.gfa ../LGP03_supernova_N.fa > graph_rev_LGP03.gfa
+minigraph -t 110 --cov -x asm mash_genetic_distance.gfa ../LGP04_supernova_N.fa > graph_rev_LGP04.gfa
+minigraph -t 110 --cov -x asm mash_genetic_distance.gfa ../LGP05_supernova_N.fa > graph_rev_LGP05.gfa
+
+*Running of survivour 
+SURVIVOR merge list.txt 1000 1 1 0 0 50 final.vcf
+Here, 
+1000--minimum length to be merged
+1(field after 1000)--support by one caller
+50--length greater than 50
+*other fields can be ignored,or go for strict filter as per requirement
+
+## SV type other than NA and extract file in matrix format:
+
+awk '!/SVTYPE=NA/{print $0}' final.vcf|perl -ne 'print "$1\n" if /SUPP_VEC=([^,;]+)/' -|sed -e 's/\(.\)/\1 /g' >sample_merged_overlapp.txt
+# Input command in R (after loading the dataset)
+venn.diagram(list(Gir = which(a[, 1] == 1), Kankrej = which(a[, 2] == 1),Tharparkar = which(a[, 3] == 1), Sahiwal = which(a[, 4] == 1), Red_sindhi = which(a[, 5] == 1)),fill = c ("gray", "orange", "blue", "red", "green"), alpha =c(0.5, 0.5, 0.5, 0.5, 0.5), cex = 1, lty =1, filename ="my_sample_overlapp.tiff");
+
+# Violin plot text
+NC_040076.1     3555611 3555671 60      DEL
+NC_040076.1     7493098 7493181 83      DEL
+NC_040076.1     14843649        14843785        136     DEL
+NC_040076.1     15458132        15458208        76      DEL
+NC_040076.1     20012520        20012698        178     DEL
+NC_040076.1     30427787        30427850        63      DEL
+NC_040076.1     32445787        32445923        136     DEL
+NC_040076.1     33415095        33415155        60      DEL
+NC_040076.1     33459497        33459627        130     DEL
+NC_040076.1     36360898        36360985        87      DEL
+NC_040076.1     36382765        36382895        130     DEL
+NC_040076.1     39969290        39969359        69      DEL
+
+
+*Biser
+Before proceedings run the hardmask the sequence using trffinder
+biser -T TEMP -t 40 -o brahman.bed --keep-contigs --no-decomposition --max-error=20 --max-edit-error=10 ./Brahman_trf_RM_bed.fasta
+-Giving output at .bedpe format
+
+* Getting depth of sample
+
+samtools fastq -@ 5 -f 12 /home/livestock/storage/freebayes/analysis/Gir_100_RG.bam -1 Gir_100_Unmapped_R1.fq -2 Gir_100_Unmapped_R2.fq
+samtools fastq -@ 5 -F 8 -f 4 /home/livestock/storage/freebayes/analysis/Gir_100_RG.bam >Gir_100_SE_unmapped.fq
+bwa-mem2 mem -t 50 nui_final_set_300bp.fa Gir_100_Unmapped_R1.fq Gir_100_Unmapped_R2.fq |samtools sort -@ 50 -o Gir_100_PE_Unmapped.bam
+bwa-mem2 mem -t 50 nui_final_set_300bp.fa Gir_100_SE_unmapped.fq|samtools sort -@ 50 -o Gir_100_SE_unmapped.bam
+samtools merge -@ 40 Gir_100_final.bam Gir_100_PE_Unmapped.bam Gir_100_SE_unmapped.bam
+samtools index -@ 40 -b Gir_100_final.bam
+samtools depth -a Gir_100_final.bam >Gir_100_depth.txt
+
+*GATK_calling_command 
+bowtie2 -p 30 -x /home/livestock/cattle_analysis/assembly/brahman_and_supercontig.fa -1 /home/livestock/processed_data/LGP-112_trim_R1.fastq.gz -2 /home/livestock/processed_data/LGP-112_trim_R2.fastq.gz -S /home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment//LGP-112.sam 2>> /home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment//LGP-112.log
+java -Dsamjdk.buffer_size=4194304 -Dsamjdk.compression_level=1 -XX:ParallelGCThreads=16 -XX:ConcGCThreads=16 -Xmx64G -jar /home/livestock/app/picard.jar SortSam R=/home/livestock/cattle_analysis/assembly/brahman_and_supercontig.fa I=/home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112.bam O=/home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_sorted.bam SORT_ORDER=coordinate TMP_DIR=/home/livestock/cattle_analysis/analysis/male_sample/test/tmp >> /home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_sorted.bam.log 2>&1
+rm /home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112.bam
+java -Dsamjdk.buffer_size=4194304 -Dsamjdk.use_async_io_read_samtools=true -Dsamjdk.use_async_io_write_samtools=true -Dsamjdk.compression_level=1 -XX:ParallelGCThreads=16 -XX:ConcGCThreads=16 -Xmx128G -jar /home/livestock/app/picard.jar MarkDuplicates I=/home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_sorted.bam O=/home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_markdup.bam M=/home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/marked_dup_metrics.txt REMOVE_DUPLICATES=true ASSUME_SORTED=true TMP_DIR=/home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/tmp  >> /home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_markdup.bam.log 2>&1
+rm /home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_sorted.bam
+java -Dsamjdk.buffer_size=4194304 -Dsamjdk.compression_level=1 -XX:ParallelGCThreads=16 -XX:ConcGCThreads=16 -Xmx128G -jar /home/livestock/app/picard.jar AddOrReplaceReadGroups I=/home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_markdup.bam O=/home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112.bam RGID=LGP-112 RGLB=LGP-112 RGPL=illumina RGPU=LGP-112 RGSM=LGP-112 >> /home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_RG.log 2>&1 
+rm /home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_markdup.bam
+java -Dsamjdk.buffer_size=4194304 -Dsamjdk.compression_level=1 -XX:ParallelGCThreads=16 -XX:ConcGCThreads=16 -Xmx128G -jar /home/livestock/app/picard.jar BuildBamIndex I=/home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112.bam R=/home/livestock/cattle_analysis/assembly/brahman_and_supercontig.fa >> /home/livestock/cattle_analysis/analysis/male_sample/test/out/LGP-112/alignment/LGP-112_RG_bam_index.log 2>&1
+/home/livestock/app/gatk-4.3.0.0/gatk --java-options "-Xmx16g -XX:ParallelGCThreads=10" HaplotypeCaller -R Hg_38.fna -I input.bam -O out.bam.vcf.gz -ERC GVCF
+/home/livestock/app/gatk-4.3.0.0/gatk --java-options "-Xmx512G" CombineGVCFs -R /home/livestock/abhisek/gatk_analysis/GCF_003369695.1_UOA_Brahman_1_genomic.fna --variant LGP-100/SNP/LGP-100.gvcf.gz --variant LGP-112/SNP/LGP-112.gvcf.gz --variant LGP-115/SNP/LGP-115.gvcf.gz --variant LGP-117/SNP/LGP-117.gvcf.gz --variant LGP-118/SNP/LGP-118.gvcf.gz --variant LGP-123/SNP/LGP-123.gvcf.gz -O brahman_gvcf_merge.vcf
+/home/livestock/app/gatk-4.3.0.0/gatk --java-options "-Xmx256G" GenotypeGVCFs -R /home/livestock/abhisek/gatk_analysis/GCF_003369695.1_UOA_Brahman_1_genomic.fna -V gvcf_merge_test_lite -O final_vc_lite.vcf
+
+
+
+
+
+
+
+
+
+
+
+
 
 
