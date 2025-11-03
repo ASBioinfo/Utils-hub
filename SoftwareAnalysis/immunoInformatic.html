@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>TcellEpitopePrediction</title>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Software Analysis</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ <script>
+  $( function() {
+    $( "#accordion" ).accordion();
+  } );
+  </script>
+<style>
+button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+button.accordion.active, button.accordion:hover {
+    background-color: #ddd;
+}
+
+button.accordion:after {
+    content: '\02795';
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+
+button.accordion.active:after {
+    content: "\2796";
+}
+
+div.panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.6s ease-in-out;
+    opacity: 0;
+}
+
+div.panel.show {
+    opacity: 1;
+    max-height: 1500px;  
+}
+</style>
+</head>
+<body>
+<h2>T-Cell Epitope Analysis</h2>
+<button class="accordion"><b>MHC-I prediction by netCTL and mhc-i program</b></button>
+<div class="panel">
+<p>HMC-I prediction comprises two steps: (i) T cell processing and (ii) T cell epitope prediction.
+   T-cell processing step simulates biological process of the input proteins that undergo proteasomal degradation and transport of antigen present(TAP)
+   T-cell epitope predction step calculates binding affinity of each epitope with user's selected MHC alleles.
+</p>
+<ul>
+  <li>Download T-cell processing program, netCTL1.2b from www.cbs.dtu.dk/services/NetCTL-1.2b/. This program is available in this computer in app folder.</li>
+  <li> Open netCTL file (gedit)in the netCTL1.2b folder and change the "setenv	CTLHOME" & "setenv	TMPDIR". </li>
+  <li>Open the program folder and run netCTL sh file as "netCTL <sequence file> -s <supertypes name> -wt 0.05 -we 1.00 -wc 0.15 >netCTL_out" (for more detail type "man -d ./netCTL.1 ").</li>
+  <li>Select only those line that having with <=E by and convert in fasta format by help of awk command.(<=E depicts potential epitope).</li>
+  <li>Go to IEDB site (https://www.iedb.org/), click MHC-I binding predictions. It opens a MHC-I bindng link in new tab</li>
+  <li>Download the MHC-i tool by clicking "Dowmlaod" of MHC-I binding webpage. This program is available in this computer in app folder by mhc_i name </li>
+  <li>Open mhc_i folder and type "./src/predict_binding.py IEDB_recommended (method name) <HLA_allele types> 9(length of epitope) nonamer_netCTL_fasta(fasta file) >mhc_I_out(output file name).</li>
+  
+</ul>   
+</div>
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+    acc[i].onclick = function(){
+        this.classList.toggle("active");
+        this.nextElementSibling.classList.toggle("show");
+  }
+}
+</script>
+</body>
+</html>

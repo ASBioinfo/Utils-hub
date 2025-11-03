@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Software Analysis</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ <script>
+  $( function() {
+    $( "#accordion" ).accordion();
+  } );
+  </script>
+<style>
+button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+button.accordion.active, button.accordion:hover {
+    background-color: #ddd;
+}
+
+button.accordion:after {
+    content: '\02795';
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+
+button.accordion.active:after {
+    content: "\2796";
+}
+
+div.panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.6s ease-in-out;
+    opacity: 0;
+}
+
+div.panel.show {
+    opacity: 1;
+    max-height: 1500px;  
+}
+</style>
+</head>
+<body>
+
+<h2>Software Analysis</h2>
+
+<button class="accordion"><b>Phylogenetic Tree</b></button>
+<div class="panel">
+<ul>
+<li>first lunch orthomcl v.1.0.4</li>
+<li>all the protin files are in orthomcl V 1.4 folder (sample data)</li>
+<li>cmd "orthomcl.pl --mode 1 --fa_files BMIND1.fa,16m.fa,abortus.fa,atcc.fa,m28.fa,M5_90.fa,Ni.fa"</li>
+<li>the output file will create date of that day "all_orthomcl.out" output file name</li>
+<li>next create one folder with "group_wise" folder name</li>
+<li>group wise we extracted all genes using script "gene_family_extraction.pl" in group wise folder</li>
+<li>cmd "perl gene_family_extraction.pl orthomcl output file name(ex: all_orthomcl.out)</li>
+<li>next we copy singe copy orthologs group  in msa folder </li>
+<li>next we run mafft software  using script "mafft.sh" it requires list.txt is input </li>
+next we change the sequnce name in all the files using script "sequence_header.pl"  input is list of the files("list .txt") and open sequence_header.pl file </li>
+<li>and change the gene names in specific order with species name.  output file is .fa("orthomcl34.fa")</li>
+<li>next we create one path file using "AWK" command "s *|awk '{print "/home/sarwar/brucella/rest/tsa/" $1}'|awk '/.fa$/{print $0}'" for gblock software-</li>
+<li>input </li>
+<li>gblock software command "Gblocks path file -t=p -e=-gb1 -b4=5 -a=y -b5=h -b3=4"  it gives output file "pathgb1.seq"</li>
+
+<li>we convert gblock to phylip using "gblock_fast2phlip.pl" script</li>
+<li>next we run seqboot: seqboot require phylip input format</li>
+<li>cmd for phylip: "seqboot input file it gives output file "seq_out"</li>
+<li>next we run phyml:"phyml -i inputfile(that is seqboot outputfile) -d aa -m JTT -a e -n 100( that is depending on no of data sets)"</li>
+<li>raxml:</li>
+<li>RAPID bootstrap analysis cmd:</li>
+<li>raxmlHPC-PTHREADS -T 10 -f a -o abortus -m PROTGAMMALG -p 12345 -x 12345 -#100 -s gblock_out.phy  -n out</li></ul>
+</div>
+
+<button class="accordion"><b>Cufflinks</b></button>
+<div class="panel">
+<ul>
+<li>cufflinks --output-dir /home/sarwar/manavathi/analysis/bowtie/cufflinks/2HEK-T7-HP-P/ --GTF /home/sarwar/manavathi/analysis/bowtie/Homo_sapiens.GRCh38.84.chr.gtf -p 10 --multi-read-correct --compatible-hits-norm --min-frags-per-transfrag 1 --frag-bias-correct /home/sarwar/manavathi/analysis/bowtie/GRCH38_chr.fasta /home/sarwar/manavathi/analysis/bowtie/2HEK-T7-HP-P/accepted_hits_sorted.bam</li> 
+
+<li>cuffmerge -g Homo_sapiens.GRCh38.84.chr.gtf -s GRCH38_chr.fasta -o cuffmerge/ -p 8 assemblies.txt</li>
+
+
+<li>cuffdiff -o cuffdiff/ -L HEK-T7,HEK-T7-HP ./cuffmerge/merged.gtf ../1HEK-T7/accepted_hits_sorted.bam,../2HEK-T7/accepted_hits_sorted.bam ../1HEK-T7-HP-P/accepted_hits_sorted.bam,../2HEK-T7-HP-P/accepted_hits_sorted.bam -u -p 8 </li>
+</li>
+</div>
+
+<button class="accordion"><b>EdgeR (histogram)</b></button>
+<div id="foo" class="panel">
+<ul>
+<li>detail manual at: "http://mmg434.readthedocs.io/en/latest/dayfivemod.html"</li>
+
+<li>library (edgeR);</li>
+
+<li>Input= HTSEq count data. remove the last 5 line which is summary of the data.</li> 
+
+<li>take input and save in uniq name like following:</li>
+<li>wt1=read.table("/home/sarwar/manavathi/analysis/bowtie/htseq_count/2HEK-T7_htseq_counts.txt",row.names=1)</li>
+
+<li>Add column names to input file (may be the same file name) like following:</li>
+<li>colnames(wt1) <- "wt1"</li>
+
+
+
+<li>iterate all the steps above for all samples with unique name.</li>
+
+
+<li>make matrix of all the dataset like following:</li>
+<li>wtvin <-cbind(wt1,wt2,in1,in2) (assuming four dataset provided to R as wt1, wt2, in1, in2)</li>
+
+<li>Make grouping of all replicates and putt all replicate in consecutive order and 1 for 1 condition and 2 for another condition.</li>
+
+<li>group <-factor(c(1,1,2,2))</li>
+
+<li>y <- DGEList(counts=wtvin,group=group)</li>
+<li>keep <- rowSums(cpm(y)>10) >=2</li>
+<li>y <-y[keep,]</li>
+<li>y$samples$lib.size <- colSums(y$counts)</li>
+<li>y <- calcNormFactors(y)</li>
+<li>y$samples</li>
+<li>plotMDS(y)</li>
+<li>y <- estimateCommonDisp(y, verbose=TRUE)</li>
+<li>y <- estimateTagwiseDisp(y)</li>
+<li>plotBCV(y)</li>
+<li>res <- exactTest(y)</li>
+<li>fdr <- p.adjust(res$table$PValue, method="BH")</li>
+<li>cpmres <- cpm(y)[rownames(res),]</li>
+<li>summary(de <- decideTestsDGE(res))</li>
+<li> write.csv(cpmres,file="/home/sarwar/manavathi/analysis/bowtie/htseq_count/cpmresults.csv")</li>
+<li> write.csv(res$table,file="/home/sarwar/manavathi/analysis/bowtie/htseq_count/DEresults.csv")</li>
+<li> write.csv(fdr,file="/home/sarwar/manavathi/analysis/bowtie/htseq_count/fdrcorrection.csv")</li>
+
+<li>detags <- rownames(y)[as.logical(de)]</li>
+<li>plotSmear(res, de.tags=detags)</li>
+<li>abline(h=c(-1,1), col="blue")</li>
+
+<li>heatmap generating</li>
+
+<li>topTags(res,n=34)</li>
+<li>vctr_names_top <- rownames(topTags(res,n=510))</li>
+<li>vctr_names_top <- c(vctr_names_top,rownames(topTags(res,n=509)))</li>
+<li>vctr_names_top <- unique(c(vctr_names_top,rownames(topTags(res,n=509))))</li>
+<li>length(vctr_names_top)</li>
+<li>mtrx_sig <- y$counts[vctr_names_top,]</li>
+<li>vctr_colors=as.factor(c("red","green"))</li>
+<li>vctr_colors</li>
+<li>vctr_sample_colors <-as.character(vctr_colors[as.numeric(y$samples$group)])</li>
+<li>vctr_sample_colors</li>
+<li>heatmap.2(log2(mtrx_sig+1),ColSideColors=vctr_sample_colors,key=TRUE, trace="none", col=heat.colors (or:col= greenred )(200),scale="row",margins=c(12,10))</li>
+
+</ul>
+
+</div>
+<button class="accordion"><b>Geneprimp</b></button>
+<div class="panel">
+<ul>
+<li>geneprimp command:</li>
+
+
+<li>geneprimp -if /home/sarwar/B_diminuta/geneprimp_2/new.gbk -it GB -idp 'Rasttk_' -idlen 5 -self 'Bdiminuta' -nr /home/sarwar/app/annotation_system/nr_data_base/nr -blastbin /usr/bin/blastall -bl2seqbin /usr/bin/bl2seq -jobid corrected -tool RASTtk -jobdir /home/sarwar/B_diminuta/geneprimp_2/</li>
+</ul>
+</div>
+<button class="accordion"><b>Glimmer</b></button>
+<div class="panel">
+<ul>
+<li>glimmer3 run:</li>
+<li>g3-iterated.csh <sequence file> <tag></li>
+<li>example:</li>
+<li>g3-iterated.csh GT_dumintia glimmer</li>
+</ul>
+</div>
+<button class="accordion"><b>Glimer pridict file to gff convertion</b></button>
+<div class="panel">
+<ul>
+<li>glimer pridict file to gff convertion:</li>
+
+<li>grep ^orf sphingopyxis.predict | awk '{OFS="\t"}{strang = "+"}{if($4 < 0) strang="-"}{gsub(/[+-]/," ")}{print "sphingopyxis", "GLIMMER", "gene" , $2 , $3, $5, strang , $4, "ID="$1"; NOTE:GLIMMER ORF prediction;"}'  >sphingopyxis_glimer.gff</li>
+<li>gff to genbank convertion:</li>
+
+<li>seqret -sequence GT_diminuta_genome.fasta -feature -fformat gff -fopenfile sphingopyxis_glimer.gff -osformat genbank -auto</li>
+
+</ul>
+</div>
+<button class="accordion"><b>Hiseq</b></button>
+<div class="panel">
+<ul>
+<li>htseq-count --format=bam --stranded=no --order=pos /home/sarwar/manavathi/analysis/star/1HEK-T7/accepted_hits_sorted.bam /home/sarwar/manavathi/analysis/bowtie/Homo_sapiens.GRCh38.84.chr.gtf >/home/sarwar/manavathi/analysis/star/1HEK-T7/1HEK-T7_htseq_counts.txt</li>      
+</ul>
+
+</div>
+<button class="accordion"><b>Canu</b></button>
+<div class="panel">
+<ul>
+<li>canu -p flug -d flug-filter_500 genomeSize=5.0m -pacbio-raw flug_500.fastq </li>
+</ul>
+</div>
+<button class="accordion"><b>RepeatMasker</b></button>
+<div class="panel">
+<ul>
+<li>running repeat masker using library of all mammals to mask the repeat sequence in buffalo which is alredy masked with repeat modelar</li>
+
+<li>RepeatMasker -species mammals buffalo.fasta.masked -pa 30 -nolowRepeatMasker version open-4.0.5</li>
+
+</ul>
+</div>
+<button class="accordion"><b>Sikel And SRA to FAstq converstion</b></button>
+<div class="panel">
+<ul>
+<li>step:1</li>
+<li>SRA to FASTQ converstion: using SRAtoolkit software</li>
+<li>"fastq-dump.2.4.5 --split-3 sra file name.sra"</li>
+<li>next we run sickle </li>
+<li>"sickle pe -f input_1.fastq -r input2_2.fastq -t sanger -o input_trimmed1.fastq -p input_trimmed2.fastq -s input_single.fastq -q 20 -l 75"</li>
+ <li>we run trinity software
+<li>"Trinity --seqType fq --max_memory 55G --left ./abomasum/abomasum_trimmed1.fastq,./bone_marrow/bone_marrow_trimmed1.fastq,./cerebellum/cerebellum_trimmed1.fastq --right ./abomasum/abomasum_trimmed2.fastq,./bone_marrow/bone_marrow_trimmed2.fastq,./cerebellum/cerebellum_trimmed2.fastq --CPU 35"</li>
+
+<li>Next "perl ../../../app/trinityrnaseq-2.0.6/util/TrinityStats.pl Trinity.fasta"</li>
+
+<li>next  "perl ../../../app/trinityrnaseq-2.0.6/util/align_and_estimate_abundance.pl --transripts Trinity.fasta --est_method RSEM --aln_method bowtie --trinity_mode --prep_reference --thread_count 30 "</li>
+
+<li>next  "perl ../../../app/trinityrnaseq-2.0.6/util/align_and_estimate_abundance.pl --transcripts Trinity.fasta --seqType fq --left ../abomasum/abomasum_trimmed1.fastq, ../bone_marrow/bone_marrow_trimmed1.fastq, ../cerebellum/cerebellum_trimmed1.fastq --right ../abomasum/abomasum_trimmed2.fastq, ../bone_marrow/bone_marrow_trimmed2.fastq, ../cerebellum/cerebellum_trimmed2.fastq --est_method RSEM --aln_method bowtie --trinity_mode --thread_count 30"</li>    
+</ul>
+</div>
+<button class="accordion"><b>SnpEFF</b></button>
+<div class="panel">
+<ul>
+<li>SnpEFF:</li>
+<li>first create one "data"(folder name) folder </li>
+<li>in that data folder create data base folder example BMIND1 is database </li>
+<li>in that folder put genes.gff, and sequences.fa files (files name must be genes,sequences)</li>
+<li>next add that database name in  snpEff.config file </li>
+<li>example:: #BMIND1</li>
+<li>          BMIND1.genome: BMIND1</li>
+
+<li>next run this command "java -jar snpEff.jar build databasename (example BMIND1)";</li>
+<li>next run this command "java -jar snpEff.jar eff database (example BMIND1) -no-downstream -no-upstream "inputfile" in </li>
+<li>         vcf formate (example ./data/28M_BMind_processed.vcf) > output file name  (example 28M_BMIND_proces.txt)</li>
+</ul>
+</div>
+<button class="accordion"><b>Star</b></button>
+<div class="panel">
+<ul>
+<li>./STAR --genomeDir Star_GRCH/ --runThreadN 24 --readFilesIn /home/sarwar/manavathi/analysis/sikel/1HEK-T7/1HEK-T7_trimmed1.fastq /home/sarwar/manavathi/analysis/sikel/1HEK-T7/1HEK-T7_trimmed2.fastq --outFileNamePrefix 1HEK-T7 </li>                                          
+</ul>
+</div>
+<button class="accordion"><b>TopHat and Trinity</b></button>
+<div class="panel">
+<ul>
+<li>first we run bowtie-bulid in genome fasta (example: buffalo.fasta)</li>
+<li>"bowtie2-build reference_in refrence_index_base"</li>
+<li>example command:</li>
+<li>bowtie2-build buffalo.fasta buffalo</li>
+
+<li>next we run "tophat" software</li>
+<li>" tophat indexfile name left_reads(space is required) right_reads -p 20"</li>
+<li>example command: </li> 
+<li>tophat2 bufflo ../abomasum/abomasum_trimmed1.fastq,../bone_marrow/bone_marrow_trimmed1.fastq,../cerebellum/cerebellum_trimmed1.fastq ../abomasum/abomasum_trimmed2.fastq,../bone_marrow/bone_marrow_trimmed2.fastq,../cerebellum/cerebellum_trimmed2.fastq -p 40</li>
+
+<li>next we run samtools sort for sorted bam (example: accepted_hit.bam)</li>
+<li>"samtools sort input.bam out_sorted"</li>
+<li>example command:</li>
+<li>samtools sort accepted_hits.bam accepted_hits_sorted</li>
+
+<li>next we run "Trinity" software </li>
+<li>Trinity --genome_guided_bam out_sorted.bam --genome_guided_max_intron 10000 --max_memory 40G --CPU 40</li>
+<li>example command:</li>
+<li>"Trinity --genome_guided_bam accepted_hits_sorted.bam --genome_guided_max_intron 10000 --max_memory 40G --CPU 40"</li>
+</ul>
+</div>
+<button class="accordion"><b>Ttuner and Ssaha </b></button>
+<div class="panel">
+<ul>
+<li>run command:</li>
+<li>ttuner -qd output_folder(test_reads) -sd output_folder(test_reads) -het -trim_window 12 -trim_threshold 25 -id input_folder</li>
+
+<li>trim_window and trim_threshold value is optimised for stringency </li>
+
+<li>to automate ttuner for all the data avaliable in the sample wise folder we can run following command:</li>
+<li>ls |awk '/^Sample/{print "ttuner -qd test_reads -sd test_reads -het -trim_window 12 -trim_threshold 25 -id "$0}' |sh</li>
+
+<li>this will generate .seq nd .qual files in fasta format. To convert this files to fastq run the following command</li>
+<li>python fasta_to_fastq.py file.seq file.qual</li>
+
+<li>To automate on all .seq and .qual in a folder, we may run the following command: </li>
+<li>ls *.seq |awk -F ".seq" '{print $0" "$1".qual"}'|awk '{print "python fasta_to_fastq.py "$0}'|sh</li>
+
+<li>for quality frocessing of fastaq sequence we may run the following script</li>
+<li>perl ttuner_pre_process_fastq.pl input_sequence</li>
+
+<li>ls *.fastq|sort  |awk '{print "cat "$0}' |sh >>test_reads.fq</li>
+<li>program take the coordinates of high quality sequence provided by ttuner in the header line of the sequnce</li>
+<li>ssaha run command:</li>
+<li> ssaha2Build -save IL6(output name) IL6.fasta(input file name) </li>
+<li>ssaha2 -output sam(output type) -outfile pre_test_reads.sam(output file name) -save IL6(database name of above cmd) pre_process_test_reads.fastq(input file name)</li> 
+
+<li>snp detection:</li>
+<li>add @SQ header line in sam file (@SQ	SN:IL1B	LN:14020) where SN: file root name LN: length of the sequence</li>
+<li>convert sam file to bam file  "samtools view -b -S -o output.bam input.sam"</li>
+<li>sorted bam file "samtools sort samtools_bowtie/SRR030257.bam samtools_bowtie/SRR030257.sorted"</li>
+<li>no need "index files "samtools index samtools_bowtie/SRR030257.sorted.bam""</li>
+<li>"samtools mpileup -u -f samtools_bowtie/NC_012967.1.fasta samtools_bowtie/SRR030257.sorted.bam > samtools_bowtie/SRR030257.bcf"</li>
+
+<li>bcftools view -v -c -g samtools_bowtie/SRR030257.bcf > samtools_bowtie/SRR030257.vcf</li>
+
+<li> samtools mpileup -cf input.fasta(IL6.fasta) sorted.bam(pre_test_reads_sorted.bam)</li>
+
+</ul>
+</div>
+<button class="accordion"><b>Bowtie2</b></button>
+<div class="panel">
+<ul>
+<li>alignment  using bowtie2:</li>
+<li>bowtie-build:</li>
+<li>bowtie2-build -f reference (file exampleatcc_23457.fasta) outputname (exmple:atcc_23457)</li>
+
+<li>command:</li>
+<li>"bowtie2 --local -x refrece_indexfile -1 ../BM.L500_SZAIPI032424-100_Clean.1.fq -2 ../BM.L500_SZAIPI032424-100_Clean.2.fq -S 16M_BM_clean.sam --no-unal 2>log"</li>
+
+</ul>
+</div>
+<button class="accordion"><b>Samtools</b></button>
+<div class="panel">
+<ul>
+<li>snp finding:</li>
+<li>convert sam file to bam file  "samtools view -b -S -o output.bam input.sam"</li>
+<li>sorted bam file "samtools sort samtools_bowtie/SRR030257.bam samtools_bowtie/SRR030257.sorted"</li>
+<li>index files "samtools index samtools_bowtie/SRR030257.sorted.bam"(no need)</li>
+<li>"samtools mpileup -u -f samtools_bowtie/NC_012967.1.fasta samtools_bowtie/SRR030257.sorted.bam > samtools_bowtie/SRR030257.bcf"</li>
+<li>bcftools view -v -c -g samtools_bowtie/SRR030257.bcf > samtools_bowtie/SRR030257.vcf</li>
+</ul>
+</div>
+
+<button class="accordion"><b>Possitive Genes</b></button>
+<div class="panel">
+<ul>
+<li>cds data download from patric web site</li>
+<li>next protine data were run using orthomcl for single copy (1:1)orthologs</li>
+<li>next 1:1 orthologs groups alignment using mafft software (mutiple sequence alignment)</li>
+<li>corresponding ortholog groups of cds to be made</li>
+<li>next run pal2nal software (pal2nal.sh file) were used for codon alignment from cds data using available</li> 
+<li>protein alignment generated above from mafft.(codon table used for codon alignment should be define for pal2nal) </li>
+<li>similar wrk can also be done using revtrans software</li>
+<li>command: 	pal2nal.pl ./fa_alingnment/$i ./cds/$i -output fasta -nogap -nomismatch -codontable 11>./codon_pal2nal_fasta/$i</li>
+<li>					OR             </li>
+ <li> revtrans.py ./cds/$i ./fa_alingnment/$i -mtx 11 >./codon_aln_rev/$i</li> 
+<li>if pal2nal is used, it should be run 2 times 1. with output option fasta 2. with output option paml</li>
+<li>next to run Fastconcat on pal2nal output fasta files and save in phylip formate(.phy)</li>
+<li>run raxml using GTRGAMMA model to make a best tree</li>
+<li>	command:	raxmlHPC-PTHREADS -T 20 -f a -m GTRGAMMA -x 12345 -p 12345 -#100 -s FcC_smatrix.phy -n cds_out</li>
+
+<li>For running codeml</li>
+<li>1. use the paml format file genareted above from pal2nal as a input sequence  file</li>				
+<li>2.use best tree genareted above if using site model</li>
+<li>3.If using branch or branch site model use #1 at the end of name branch or at the node (ex: (lc363:0.1254,rastk #1:1.254)</li>
+
+<li>run codeml using control file:</li>
+<li>change the veriable of ctl file as per model selected.If using more then one sequence put ndata=no of genes/data sets</li>
+</ul>
+</div>
+
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+    acc[i].onclick = function(){
+        this.classList.toggle("active");
+        this.nextElementSibling.classList.toggle("show");
+  }
+}
+</script>
+
+</body>
+</html>
+
