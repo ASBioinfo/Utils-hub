@@ -1,0 +1,6 @@
+/home/livestock/syri/between_breeds/LGP03_ragtag_chr_only.fasta.masked
+/home/livestock/syri/between_breeds/LGP01_ragtag_chr_only.fasta.masked
+/home/livestock/syri/between_breeds/LGP02_ragtag_chr_only.fasta.masked
+/home/livestock/syri/between_breeds/LGP05_ragtag_chr_only.fasta.masked
+/home/livestock/syri/between_breeds/LGP04_ragtag_chr_only.fasta.masked
+/home/livestock/syri/between_breeds/brahman_1_genomic_chr_only.fna.masked

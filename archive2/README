@@ -1,0 +1,60 @@
+Tuesday August 12 2014
+About lunchtime.
+
+All these scripts were made for this paper:
+A beginners guide to estimating the non-synonymous to synonymous rate ratio of all protein-coding genes in a genome.
+
+By:
+Daniel C. Jeffares*, Bartłomiej Tomiczek, Victor Sojo and Mario dos Reis
+Research Department of Genetics, Evolution and Environment
+University College London
+Gower Street
+London WC1E 6BT
+United Kingdom
+
+We have tested them all with our data sets, and we hope they are useful to you.
+But we do not gaurantee they will work with your data.
+See the DISCLAIMER in each script.
+
+Feel free to use them, hack them, or share them.
+
+
+################################################
+THE SCRIPTS WE HAVE NOW ARE:
+################################################
+
+multiple_sequence_splitter.pl
+Splits a FASTA file with many sequences into one file per sequence
+
+gff_cds_proteins_processor.pl
+Extracts CDS sequences from a FASTA nucleotide file according to GFF coordinates, translates
+
+genes_from_genome.pl
+Extracts CDS sequences and proteins from a Genbank or Embl file
+
+align_orthologs.pl
+Aligns proteins, generates codon-aware nucleotide alignment
+* This has not been rigorously checked, and need some work.
+
+
+################################################
+THE SCRIPTS WE HAVE YET TO DO ARE:
+################################################
+
+orthologs_from_RBBH.pl
+Assigns orthologs using the clustered Reciprocal Best Blast (cRBB) approach
+
+concatenate_alignments.pl
+Takes a list of alignment files and outputs a single concatenated alignment file
+
+codeml_simple.pl
+Runs CODEML for all genes in a list
+
+codeml_site_models.pl
+Runs CODEML for all genes in a list. Performs the likelihood ratio tests for site models
+
+codeml_branch_models.pl
+Runs CODEML for all genes in a list. Performs the likelihood ratio tests for branch models.
+
+
+

@@ -1,0 +1,21 @@
+#!usr/bin/perl
+$b= 5*1;
+print "$b\n";
+$c=5*2;
+print "$c\n";
+$d=5*3;
+print "$d\n";
+$e=5*4;
+print "$e\n";
+$f=5*5;
+print "$f\n";
+$g=5*6;
+print "$g\n";
+$h=5*7;
+print "$h\n";
+$i=5*8;
+print "$i\n";
+$j=5*9;
+print "$j\n";
+$k=5*10;
+print "$k\n";

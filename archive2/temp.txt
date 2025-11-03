@@ -1,0 +1,195 @@
+ref=/home/livestock/syri/between_breeds/LGP03_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP01_ragtag_chr_only.fasta.masked
+
+mkdir LGP03xLGP01
+cd LGP03xLGP01
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP03xLGP01 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP03_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP02_ragtag_chr_only.fasta.masked
+
+mkdir LGP03xLGP02
+cd LGP03xLGP02
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP03xLGP02 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP03_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP05_ragtag_chr_only.fasta.masked
+
+mkdir LGP03xLGP05
+cd LGP03xLGP05
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP03xLGP05 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP03_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP04_ragtag_chr_only.fasta.masked
+
+mkdir LGP03xLGP04
+cd LGP03xLGP04
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP03xLGP04 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP03_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/brahman_1_genomic_chr_only.fna.masked
+
+mkdir LGP03xbrahman
+cd LGP03xbrahman
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP03xbrahman --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP01_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP02_ragtag_chr_only.fasta.masked
+
+mkdir LGP01xLGP02
+cd LGP01xLGP02
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP01xLGP02 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP01_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP05_ragtag_chr_only.fasta.masked
+
+mkdir LGP01xLGP05
+cd LGP01xLGP05
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP01xLGP05 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP01_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP04_ragtag_chr_only.fasta.masked
+
+mkdir LGP01xLGP04
+cd LGP01xLGP04
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP01xLGP04 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP01_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/brahman_1_genomic_chr_only.fna.masked
+
+mkdir LGP01xbrahman
+cd LGP01xbrahman
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP01xbrahman --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP02_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP05_ragtag_chr_only.fasta.masked
+
+mkdir LGP02xLGP05
+cd LGP02xLGP05
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP02xLGP05 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP02_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP04_ragtag_chr_only.fasta.masked
+
+mkdir LGP02xLGP04
+cd LGP02xLGP04
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP02xLGP04 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP02_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/brahman_1_genomic_chr_only.fna.masked
+
+mkdir LGP02xbrahman
+cd LGP02xbrahman
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP02xbrahman --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP05_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/LGP04_ragtag_chr_only.fasta.masked
+
+mkdir LGP05xLGP04
+cd LGP05xLGP04
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP05xLGP04 --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP05_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/brahman_1_genomic_chr_only.fna.masked
+
+mkdir LGP05xbrahman
+cd LGP05xbrahman
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP05xbrahman --all
+cd ..
+
+
+ref=/home/livestock/syri/between_breeds/LGP04_ragtag_chr_only.fasta.masked
+
+query=/home/livestock/syri/between_breeds/brahman_1_genomic_chr_only.fna.masked
+
+mkdir LGP04xbrahman
+cd LGP04xbrahman
+nucmer --maxmatch -c 500 -b 500 -l 100 -t 30 $ref $query
+delta-filter -m -i 90 -l 100 out.delta > out_m_i90_l100.delta
+show-coords -THrd out_m_i90_l100.delta > out_m_i90_l100.coords
+syri -c out_m_i90_l100.coords -r $ref -q $query -d out_m_i90_l100.delta --nc 30 --prefix LGP04xbrahman --all
+cd ..
+
+

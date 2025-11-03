@@ -1,0 +1,26 @@
+he command varies if you are pushing or pulling or using the daemon, but the options remain the same.
+
+rsync -rtu --delete SOURCE root@x.x.x.x:/DESTINATION
+
+In this example, pay attention to the -rtu --delete options.
+ We have already discussed the -r and -t options–recursive copy and time stamp copy. 
+The -u option tells rsync to update only different/changed/added files from the SOURCE to the DESTINATION. 
+The option --delete will remove any files from the DESTINATION that the SOURCE may no longer have. 
+With this (and other options, like -l for symlinks) you can keep directories in multiple locations up to date with the source.
+
+
+when first time transferring the file:
+
+rsync -rt SOURCE root@x.x.x.x:/DESTINATION
+
+to update the destination we need to run :
+
+rsync -rtu SOURCE root@x.x.x.x:/DESTINATIONs
+
+
+
+
+rsync for NCBI download
+
+(base) sarwar@sarwar-Precision-7820-Tower:~/rough$ rsync --copy-links --recursive --times --verbose rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/002/220/415/GCA_002220415.3_Triticum_4.0/ ./
+
