@@ -8,7 +8,7 @@ my $filename=$ARGV[0];
 chomp $filename;
 print"$filename\n";
 my $p=0;
-my $name="This_is_starat";my @rlength=();
+my $name="This_is_start";my @rlength=();
 open(FILE,$filename);
 while(my $line=<FILE>)
 {chomp $line;
@@ -24,7 +24,7 @@ $b= length($line);
 $p=$p+$b;
 #print"$b\n\n";
 }
-print"$name\tlenght= $p\n";
+print"$name\tlength= $p\n";
 push @rlength,$p;print"Total sequences= $#rlength\n";
 shift(@rlength);
 
@@ -33,7 +33,7 @@ shift(@rlength);
 #print"sarwar $rlength[0]\t$rlength[1]\t$rlength[3]\t$rlength[46883]\n";
 
 
-my @clength=reverse sort { $a <=> $b } @rlength;print"largest= $clength[0]\n smallest= $clength[$#clength]\n";
+my @clength=reverse sort { $a <=> $b } @rlength;print"largest= $clength[0]\nsmallest= $clength[$#clength]\n";
 my $totalbase=0;
 my $i;
 for ($i=0;$i<=$#clength;$i++){
@@ -45,7 +45,7 @@ my $half=$totalbase/2;
 $totalbase=0;
 for ($i=0;$i<=$#clength;$i++){
 $totalbase=$totalbase+$clength[$i];
-if ($totalbase >=$half){print " N50 = $clength[$i]\n";	$i++; print " L50 = $i\n";	last;}
+if ($totalbase >=$half){print " N50 = $clength[$i]\n";	$i++; print " L50 = ".($i-1)."\n";	last;}
 }
 
 
